@@ -3,14 +3,32 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The Board class simulates a board for Othello game. It holds a list of the board
+ * cells which itself holds a disc for player 1, player 2 or is empty.
+ * The first player plays white and the second player plays black.
+ * Also this class is a parent class of MultiPlayerBoard and SinglePlayerBoard and is
+ * a child class of JFrame.
+ * @author Negar Movaghatian
+ * @since 2020-03-29
+ */
 public class Board extends JFrame{
 
+    // The list of the board's cells
     protected Cell[][] cells;
+    // The number of discs player 1 has on the board
     protected int player1Cells;
+    // The number of discs player 2 has on the board
     protected int player2Cells;
+    // A text label to show the scores
     protected JLabel scores;
+    // Directions of the board
     protected String[] directions = {"E", "W", "S", "N", "SE", "SW", "NE", "NW"};
 
+    /**
+     * Creat a new board with adding 64 cells to it and setting
+     * the four player initial discs.
+     */
     public Board() {
 
         cells = new Cell[8][8];
@@ -18,6 +36,7 @@ public class Board extends JFrame{
         player2Cells = 2;
 
         setLayout(new FlowLayout());
+
         for (int i=0; i<8; i++)
             for (int j=0; j<8; j++) {
                 Cell c = new Cell(i, j);
@@ -32,6 +51,10 @@ public class Board extends JFrame{
         add(scores);
     }
 
+    /**
+     * Disable the buttons which can not hold a new disk in this round according to the games's rules.
+     * @return The number of cells which are capable of holding new discs in this round.
+     */
     protected int disableCells() {
         int legalCells = 64;
         for (int i=0; i<8; i++) {
@@ -52,6 +75,19 @@ public class Board extends JFrame{
         return legalCells;
     }
 
+    /**
+     * Check the number of discs moving from (x, y) to the given direction that should be flipped
+     * according to the game's rules when we put a disc with color 'color' on the coordinate (x, y).
+     * If 'check' is true then we only need the number of discs, otherwise the action would be performed
+     * and the discs would be flipped.
+     * @param dir the direction to move and check the disc on its way.
+     * @param color The color of the cell to begin from.
+     * @param x The y of the cell to begin from.
+     * @param y The y of the cell to begin from.
+     * @param check This boolean shows if the action is really happening and the discs must be flipped(false)
+     *              or we only need to know the number of disc that will be flipped(true).
+     * @return The number of cells to be flipped while moving in the given direction.
+     */
     protected int action(String dir, int color, int x, int y, boolean check) {
         int dx = 0, dy = 0, tmpx = x, tmpy = y;
         if (dir.contains("E")) dx = 1;

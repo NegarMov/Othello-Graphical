@@ -2,8 +2,23 @@ package com.company;
 
 import javax.swing.*;
 
+/**
+ * The Board class simulates a board for Othello game. It holds a list of the board
+ * cells which itself holds a disc for player 1, player 2 or is empty.
+ * The first player plays white and the second player plays black.
+ * In this mode, one of the players is computer and the other one is a human.
+ * Also this class is a parent class for MultiPlayerBoard and SinglePlayerBoard.
+ * @author Negar Movaghatian
+ * @since 2020-03-29
+ */
 public class SinglePlayerBoard extends Board {
 
+    /**
+     * Run a single-player game while the board still has an empty cell
+     * capable of placing a new disc on. Also manage the number of discs of
+     * each player on board (which represents the player's score).
+     * At the end show the name of the winner, the player whose score is greater.
+     */
     public void runGame() {
         while (player1Cells + player2Cells<64) {
             int numberOfCells = disableCells();
@@ -18,6 +33,7 @@ public class SinglePlayerBoard extends Board {
             }
             else {
                 if (Cell.getTurn()==0) {
+                    // Human's turn
                     while (!Cell.isSelected()) ;
 
                     player1Cells++;
@@ -29,6 +45,7 @@ public class SinglePlayerBoard extends Board {
                     Cell.actionDone();
                 }
                 else {
+                    // Computer's turn
                     try {
                         Thread.sleep(750);
                     }

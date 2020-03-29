@@ -2,8 +2,23 @@ package com.company;
 
 import javax.swing.*;
 
+/**
+ * The MultiPlayerBoard class simulates an Othello board for two players. It holds a list of the board
+ * cells which itself holds a disc for player 1, player 2 or is empty.
+ * The first player plays white and the second player plays black.
+ * In this mode, both of the players are human.
+ * Also this class is a child class of Board.
+ * @author Negar Movaghatian
+ * @since 2020-03-28
+ */
 public class MultiPlayerBoard extends Board {
 
+    /**
+     * Run a multi-player game while the board still has an empty cell
+     * capable of placing a new disc on. Also manage the number of discs of
+     * each player on board (which represents the player's score).
+     * At the end show the name of the winner, the player whose score is greater.
+     */
     public void runGame() {
         while (player1Cells + player2Cells<64) {
             int numberOfCells = disableCells();
