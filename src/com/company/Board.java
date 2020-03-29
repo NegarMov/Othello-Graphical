@@ -5,10 +5,11 @@ import java.awt.*;
 
 public class Board extends JFrame{
 
-    private Cell[][] cells;
-    private int player1Cells;
-    private int player2Cells;
-    private JLabel scores;
+    protected Cell[][] cells;
+    protected int player1Cells;
+    protected int player2Cells;
+    protected JLabel scores;
+    protected String[] directions = {"E", "W", "S", "N", "SE", "SW", "NE", "NW"};
 
     public Board() {
 
@@ -31,63 +32,15 @@ public class Board extends JFrame{
         add(scores);
     }
 
-    public void runGame() {
-        while (player1Cells + player2Cells<64) {
-            int numberOfCells = disableCells();
-            if (numberOfCells==0) {
-                JOptionPane.showMessageDialog(null, "Pass!", "No Available Move",  JOptionPane.INFORMATION_MESSAGE);
-                Cell.reverseTurn();
-                numberOfCells = disableCells();
-                if (numberOfCells==0)
-                    JOptionPane.showMessageDialog(null, (player1Cells>player2Cells)? "<<PLAYER 1 WINS!>>" : "<<PLAYER 2 WINS!>>","End of the Game" , JOptionPane.PLAIN_MESSAGE);
-            }
-            else {
-                while (!Cell.isSelected()) ;
-
-                if (Cell.turn == 1) {
-                    player1Cells++;
-                }
-                else
-                    player2Cells++;
-
-                int color = Cell.getSelectedStat();
-                int x = Cell.getSelectedX();
-                int y = Cell.getSelectedY();
-                action("E", color, x, y, false);
-                action("W", color, x, y, false);
-                action("S", color, x, y, false);
-                action("N", color, x, y, false);
-                action("NE", color, x, y, false);
-                action("SE", color, x, y, false);
-                action("NW", color, x, y, false);
-                action("SW", color, x, y, false);
-
-                Cell.actionDone();
-                remove(scores);
-                scores = new JLabel("Player 1:   " + player1Cells + "            Player 2:   " + player2Cells  + "          " + ((Cell.getTurn()==0)? "[Player 1]" : "[Player 2]"));
-                add(scores);
-                repaint();
-                revalidate();
-            }
-        }
-        JOptionPane.showMessageDialog(null, (player1Cells>player2Cells)? "<<PLAYER 1 WINS!>>" : "<<PLAYER 2 WINS!>>","End of the Game" , JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private int disableCells() {
+    protected int disableCells() {
         int legalCells = 64;
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
                 cells[i][j].getButton().setEnabled(true);
                 int color = (Cell.getTurn()==0)? 1 : -1;
-                boolean able = action("E", color, i, j, true)
-                        || action("W", color, i, j, true)
-                        || action("S", color, i, j, true)
-                        || action("N", color, i, j, true)
-                        || action("NE", color, i, j, true)
-                        || action("SE", color, i, j, true)
-                        || action("NW", color, i, j, true)
-                        || action("SW", color, i, j, true)
-                        || cells[i][j].getStat()!=0;
+                boolean able = cells[i][j].getStat()!=0;
+                for (int d=0; d<8; d++)
+                    able = able || action(directions[d], color, i, j, true)>0;
                 if (!able) {
                     cells[i][j].getButton().setEnabled(false);
                         legalCells--;
@@ -99,7 +52,7 @@ public class Board extends JFrame{
         return legalCells;
     }
 
-    private boolean action(String dir, int color, int x, int y, boolean check) {
+    protected int action(String dir, int color, int x, int y, boolean check) {
         int dx = 0, dy = 0, tmpx = x, tmpy = y;
         if (dir.contains("E")) dx = 1;
         if (dir.contains("W")) dx = -1;
@@ -116,7 +69,7 @@ public class Board extends JFrame{
         }
         if ((x>=0 && y>=0 && x<8 && y<8) && cells[x][y].getStat()==color) {
             if (check)
-                return (cellsBetween>0);
+                return cellsBetween;
             if (color==1) {
                 player1Cells += cellsBetween;
                 player2Cells -= cellsBetween;
@@ -129,11 +82,10 @@ public class Board extends JFrame{
             tmpy += dy;
             while (tmpx>=0 && tmpy>=0 && tmpx<8 && tmpy<8 && cells[tmpx][tmpy].getStat()!=color) {
                 cells[tmpx][tmpy].updateCell((color==1)? "W" : "B");
-
                 tmpx += dx;
                 tmpy += dy;
             }
         }
-        return false;
+        return 0;
     }
 }
