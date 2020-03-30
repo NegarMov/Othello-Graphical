@@ -26,8 +26,10 @@ public class MultiPlayerBoard extends Board {
                 JOptionPane.showMessageDialog(null, "Pass!", "No Available Move",  JOptionPane.INFORMATION_MESSAGE);
                 Cell.reverseTurn();
                 numberOfCells = disableCells();
-                if (numberOfCells==0)
-                    JOptionPane.showMessageDialog(null, (player1Cells>player2Cells)? "<<PLAYER 1 WINS!>>" : "<<PLAYER 2 WINS!>>","End of the Game" , JOptionPane.PLAIN_MESSAGE);
+                if (numberOfCells==0) {
+                    JOptionPane.showMessageDialog(null, (player1Cells > player2Cells) ? "<<PLAYER 1 WINS!>>" : "<<PLAYER 2 WINS!>>", "End of the Game", JOptionPane.PLAIN_MESSAGE);
+                    break;
+                }
             }
             else {
                 while (!Cell.isSelected()) ;

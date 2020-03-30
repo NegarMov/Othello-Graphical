@@ -1,7 +1,6 @@
 package com.company;
 
 import javax.swing.*;
-import java.util.Scanner;
 
 /**
  * The main class determines if the player wants to play in single (With computer) or multi player mode.
@@ -14,15 +13,16 @@ public class Main {
     public static void main(String[] args) {
 
         // Determine if the game is single-player or multi-player
-        System.out.println("1)Single Player\n2)Multi Player");
-        Scanner scn = new Scanner(System.in);
-        int ans = scn.nextInt();
+        String[] ops = {"Single Player", "Multi Player"};
+        int ans = JOptionPane.showOptionDialog(null, "Please choose the game mode.",
+                "Single or Multi Player", 0, 3, null, ops, ops[0]);
 
-        if (ans==2) {
+        if (ans==1) {
             // Run a multi-player game
             MultiPlayerBoard MPBoard = new MultiPlayerBoard();
             MPBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             MPBoard.setSize(500, 520);
+            MPBoard.setResizable(false);
             MPBoard.setVisible(true);
             MPBoard.repaint();
             MPBoard.runGame();
@@ -32,6 +32,7 @@ public class Main {
             SinglePlayerBoard SPBoard = new SinglePlayerBoard();
             SPBoard.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             SPBoard.setSize(500, 520);
+            SPBoard.setResizable(false);
             SPBoard.setVisible(true);
             SPBoard.repaint();
             SPBoard.runGame();
